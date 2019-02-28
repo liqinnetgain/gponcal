@@ -12,6 +12,7 @@
     "eddystone-beacon": "^1.0.7",
     "eslint": "^5.14.1",
     "express": "^4.16.4",
+    "jspdf": "^1.5.3",
     "socket.io": "^2.2.0"
   }
 }

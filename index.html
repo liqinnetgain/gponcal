@@ -78,6 +78,8 @@
     });
     </script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
 </head>
 <body>
         <!-- <div><input type="text" id="datepicker" size="30"></div> -->
@@ -90,7 +92,8 @@
 <div id="error-container"></div>
 <b> <u></u> Customer Info </b>
 <hr/>
-<table>
+<div id="content">
+    <table>
     <tr>
         <td>
     <tr>
@@ -101,12 +104,13 @@
 </table>
 <br>
 <!--<div><img src="images/Dual-homed-xPON-typeB-protection-network.png" height="70%"></div>-->
-<img src="images/Dual-homed-xPON-typeB-protection-network.png" alt="Gpon Diagram" class="responsive" width="600" height="400">
+    <!--<img src="images/Dual-homed-xPON-typeB-protection-network.png" alt="Gpon Diagram" class="responsive" width="600" height="400">-->
+    <img src="http://159.138.90.173/images/d.png" alt="Gpon Diagram" class="responsive" width="600" height="400">
 
 <br>
 <table cellspacing="0" border="1" id="tbl_custinfo">
     <tr>
-        <td style="min-width:50px">Name of customer</td>
+        <td style="min-width:50px">Customer</td>
         <td style="min-width:50px">
             <!-- <div
               contenteditable="true"
@@ -126,7 +130,7 @@
         </td>
     </tr>
     <tr>
-        <td style="min-width:50px">Industry sector</td>
+        <td style="min-width:50px">Industry</td>
         <td style="min-width:50px">
             <div class="inputcell" id="Industry" placeholder="Industry sector" contenteditable="true"></div>
         </td>
@@ -214,7 +218,8 @@
         </td>
         <td style="min-width:50px" id="ea5800x7_8pkg">0</td>
     </tr>
-</table>
+</table></div>
+<button id="cmd" hidden>Generate PDF</button>
 </body>
 <script>
     var oltPrice8p = '201566.80';
@@ -223,5 +228,20 @@
     document.getElementById("ea5801gp088uprice").innerHTML = oltPrice8p;
     document.getElementById("ea5800x2unprice").innerHTML = oltPrice16p;
     document.getElementById("ea5800x7uprice").innerHTML = oltPrice16p_1;
+
+    var doc = new jsPDF();
+    var specialElementHandlers = {
+        '#editor': function (element, renderer) {
+            return true;
+        }
+    };
+    $('#cmd').click(function () {
+        doc.fromHTML($('#content').html(), 15, 15, {
+            'width': 170,
+            'elementHandlers': specialElementHandlers
+        });
+        doc.save('sample-file.pdf');
+    });
+
 </script>
 </html>
