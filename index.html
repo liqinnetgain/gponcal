@@ -6,6 +6,11 @@
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <style>
+        .responsive {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+        }
         .inputcell {
             width: 200px;
             height: 15px;
@@ -13,7 +18,6 @@
             border: 1px solid rgb(221, 221, 221);
             padding: 5px;
             color: blue
-            /* color: rgb(187, 184, 194); */
         }
 
         .inputcell[placeholder]:empty:before {
@@ -21,23 +25,14 @@
             color: rgb(194, 184, 184);
         }
     </style>
-</head>
 
-<script src="/socket.io/socket.io.js"></script>
 <script>
-    // document.getElementById('custnm').innerHTML = 'StarHub';
-    var socket = io();
-
     function fun_gponcal() {
         var unitPrice4p = parseFloat('787.00');
         var unitPrice8p = parseFloat('1634.00');
         var oltPrice8p = parseFloat('201566.80');
         var oltPrice16p = parseFloat('671732.00');
         var oltPrice16p_1 = parseFloat('880072.00');
-        // debugger;
-        // var r = $("#tbl_custinfo #tr_endpoint #td_endpoint").text();
-        // var r1 = $("#custnm").text();
-        // var r2 = $("#engage").text();
         var endpoints1 = $("#_endpoints").text().trim();
         if (endpoints1 == '') {
             // debugger;
@@ -45,65 +40,47 @@
             return false;
         }
         var endpoints = endpoints1 == '' ? 0 : parseInt(endpoints1, 10);
-        var ont4port = endpoints / 4;
-        var ont8port = endpoints / 8;
-        document.getElementById("nosont4").innerHTML = ont4port;
-        document.getElementById("nosont8").innerHTML = ont8port;
+        var ont4port = Math.ceil(endpoints / 4);
+        var ont8port = Math.ceil(endpoints / 8);
+        document.getElementById("nosont4").innerHTML = ont4port.toString();
+        document.getElementById("nosont8").innerHTML = ont8port.toString();
         var ea5801G084psub = ont4port * unitPrice4p;
         var ea5801G088psub = ont8port * unitPrice8p;
-        document.getElementById("ea5801G084psub").innerHTML = ea5801G084psub;
-        document.getElementById("ea5801G088psub").innerHTML = ea5801G088psub;
+        document.getElementById("ea5801G084psub").innerHTML = ea5801G084psub.toString();
+        document.getElementById("ea5801G088psub").innerHTML = ea5801G088psub.toString();
 
-        document.getElementById("ea5801G084pkg").innerHTML = ea5801G084psub + oltPrice8p;
-        document.getElementById("ea5801G088pkg").innerHTML = ea5801G088psub + oltPrice16p;
+        document.getElementById("ea5801G084pkg").innerHTML = (ea5801G084psub + oltPrice8p).toString();
+        document.getElementById("ea5801G088pkg").innerHTML = (ea5801G088psub + oltPrice16p).toString();
 
-
-        // var ea5800x,ea5800x1;
-        document.getElementById("ea5800x2_4pkg").innerHTML = ea5801G084psub + oltPrice16p;
-        document.getElementById("ea5800x2_8pkg").innerHTML = ea5801G088psub + oltPrice16p;
+        document.getElementById("ea5800x2_4pkg").innerHTML = (ea5801G084psub + oltPrice16p).toString();
+        document.getElementById("ea5800x2_8pkg").innerHTML = (ea5801G088psub + oltPrice16p).toString();
 
         var ea5800x, ea5800x1;
-        document.getElementById("ea5800x7_4pkg").innerHTML = unitPrice4p * ont4port + oltPrice16p_1;
-        document.getElementById("ea5800x7_8pkg").innerHTML = unitPrice8p * ont8port + oltPrice16p_1;
+        document.getElementById("ea5800x7_4pkg").innerHTML = (unitPrice4p * ont4port + oltPrice16p_1).toString();
+        document.getElementById("ea5800x7_8pkg").innerHTML = (unitPrice8p * ont8port + oltPrice16p_1).toString();
 
-        debugger;
+        // debugger;
         //console.log(document.getElementById('endpoints').value);
-        // socket.emit('gponcal', document.getElementById('endpoints').value);
     }
 
-    function setUsername() {
-        socket.emit("setUsername", document.getElementById("name").value);
-    }
-
-    var user;
-    socket.on("userExists", function (data) {
-        document.getElementById("error-container").innerHTML = data;
-    });
-    socket.on("userSet", function (data) {
-        user = data.username;
-        document.body.innerHTML =
-            '<input type = "text" id = "message">\
-             <button type = "button" name = "button" onclick = "sendMessage()">Send</button>\
-             <div id = "message-container"></div>';
-        // document.getElementById('custnm').innerHTML = 'StarHub';
-    });
-
-    function sendMessage() {
-        var msg = document.getElementById("message").value;
-        if (msg) {
-            socket.emit("msg", {message: msg, user: user});
-        }
-    }
-
-    socket.on("newmsg", function (data) {
-        if (user) {
-            document.getElementById("message-container").innerHTML +=
-                "<div><b>" + data.user + "</b>: " + data.message + "</div>";
-        }
-    });
 </script>
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+    <script>
+    $(function() {
+        $( "#datepicker" ).datepicker();
+        $( "#anim" ).change(function() {
+            $( "#datepicker" ).datepicker( "option", "showAnim", $( this ).val() );
+        });
+    });
+    </script>
+
+</head>
 <body>
+        <!-- <div><input type="text" id="datepicker" size="30"></div> -->
 <script>
     $(document).ready(function () {
         console.log("ready!");
@@ -113,15 +90,21 @@
 <div id="error-container"></div>
 <b> <u></u> Customer Info </b>
 <hr/>
-<table cellspacing="0" border="1" id="tbl_custinfo">
+<table>
     <tr>
-        <td style="min-width:50px">Huawei GPON Solution Package</td>
-        <td style="min-width:50px">
-            <button type="button" name="button" onclick="fun_gponcal()">
-                Let me Calculate Price
-            </button>
-        </td>
+        <td>
+    <tr>
+    <td style="min-width:50px; align-self: auto;padding: 25px;"><h2>Huawei GPON Solution Package</h2></td>
     </tr>
+    </td>
+    </tr>
+</table>
+<br>
+<!--<div><img src="images/Dual-homed-xPON-typeB-protection-network.png" height="70%"></div>-->
+<img src="images/Dual-homed-xPON-typeB-protection-network.png" alt="Gpon Diagram" class="responsive" width="600" height="400">
+
+<br>
+<table cellspacing="0" border="1" id="tbl_custinfo">
     <tr>
         <td style="min-width:50px">Name of customer</td>
         <td style="min-width:50px">
@@ -137,65 +120,33 @@
     </tr>
     <tr>
         <td style="min-width:50px">Date of engagement</td>
-        <td style="min-width:50px">
-            <!-- <div contenteditable="true" id="engage" style="border:solid 1px #060">
-              date of engagement
-            </div> -->
-            <div class="inputcell" id="engage" placeholder="date of engagement" contenteditable="true"></div>
+        <td style="min-width:50px; border: 1px solid rgb(221, 221, 221); background: #f5f5f5;">
+            <!-- <div class="inputcell" id="engage" placeholder="date of engagement" contenteditable="true"></div> -->
+            <div><input type="text" id="datepicker" size="30"></div>
         </td>
     </tr>
     <tr>
         <td style="min-width:50px">Industry sector</td>
         <td style="min-width:50px">
-            <!-- <div
-              contenteditable="true"
-              id="Industry"
-              style="border:solid 1px #060"
-            ></div> -->
             <div class="inputcell" id="Industry" placeholder="Industry sector" contenteditable="true"></div>
         </td>
     </tr>
     <tr>
-        <td style="min-width:50px">Estimate nos of end hoster</td>
+        <td style="min-width:50px">Estimate nos of end points</td>
         <td style="min-width:50px">
-            <!-- <div class="inputcell"
-              contenteditable="true"
-              id="_endpoints"
-              style="border:solid 1px rgb(56, 0, 102)" placeholder="ngagement"
-            >
-
-            </div> -->
             <div class="inputcell" id="_endpoints" placeholder="nos of endpoints" contenteditable="true">
             </div>
         </td>
-        <!-- <td style=min-width:50px>
-              <button type="button" name="button" onclick="fun_gponcal()">
-                    Calculate
-                 </button>
-        </td> -->
-
+        <td style=min-width:50px>
+            <button type="button" name="button" onclick="fun_gponcal()">
+                Let me Calculate
+            </button>
+        </td>
     </tr>
     <tr>
         <td style="min-width:50px">Type of redundancy</td>
         <td style="min-width:50px" id="typeofredt">Dual-Homing xPON Type B</td>
     </tr>
-    <!-- <tr id="tr_endpoint">
-      <td style="min-width:50px">Estimate nos of end host</td>
-      <td style="min-width:50px">
-        <div
-          contenteditable="true"
-          id="td_endpoints"
-          style="border:solid 1px #060"
-        >
-          0
-        </div>
-      </td>
-      <td style=min-width:50px>
-             <button type="button" name="button" onclick="fun_gponcal()">
-                   Calculate
-                </button>
-       </td>
-    </tr> -->
     <tr>
         <td style="min-width:50px">Number of 4 Port ONT</td>
         <td style="min-width:50px" id="nosont4">0</td>
@@ -249,7 +200,7 @@
         <td style="min-width:50px">
             SmartAX EA5800-X2 8 Ports ONT Package Price
         </td>
-        <td style="min-width:50px" id="ea5800x2_8pkg">#REF!</td>
+        <td style="min-width:50px" id="ea5800x2_8pkg">0</td>
     </tr>
     <tr>
         <td style="min-width:50px">
@@ -263,28 +214,9 @@
         </td>
         <td style="min-width:50px" id="ea5800x7_8pkg">0</td>
     </tr>
-    <tr>
-        <td style="min-width:50px">Total</td>
-        <td style="min-width:50px" id="total">15.375</td>
-    </tr>
 </table>
-
-<input
-        id="name"
-        type="text"
-        name="name"
-        value=""
-        placeholder="Enter your name!"
-        hidden
-/>
-<button type="button" name="button" onclick="fun_gponcal()" hidden>
-    Let me chat!
-</button>
 </body>
 <script>
-    // var oltPrice8p = parseFloat('201566.80');
-    // var oltPrice16p = parseFloat('671732.00');
-    // var oltPrice16p_1 = parseFloat('880072.00');
     var oltPrice8p = '201566.80';
     var oltPrice16p = '671732.00';
     var oltPrice16p_1 = '880072.00';
