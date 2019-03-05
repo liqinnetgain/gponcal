@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="456d1af9-19ed-4ee5-af22-6610751b5a57" name="www.ectivisecould.com" url="http://www.ectivisecloud.com">
+        <fileTransfer host="www.ectivisecloud.com" port="22" privateKey="C:\Users\Admin\.ssh\ectivisepair.pem" rootFolder="/var/www/html" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
